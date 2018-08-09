@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogo</title>
+</head>
+<body>
+    <form method="post" action="{% url 'HangmanGame:jogar' %}">
+        {% csrf_token %}
+        <input type="hidden" name="id" id="id" value="{{ word.id }}" />
+    </form>
+</body>
+</html>

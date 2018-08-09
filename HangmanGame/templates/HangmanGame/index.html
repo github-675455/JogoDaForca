@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <a href="{% url 'HangmanGame:iniciar' %}" target="_self">iniciar um novo jogo</a>
+    {% if continuar_jogo %}
+        <a href="{% url 'HangmanGame:continuar' %}" target="_self">continuar o jogo</a>
+    {% endif %}
+</body>
+</html>
