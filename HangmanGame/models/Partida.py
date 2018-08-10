@@ -14,18 +14,50 @@ class Partida(models.Model):
     ganhou = models.BooleanField(null=True)
 
     def incluir_letra_tentada(self, letra):
+
+        palavra = self.palavra.descricao
+
+        if letra in self.letras or self.ganhou != None:
+            return
+
+        if letra not in unidecode(palavra.lower()):
+            self.errou += 1;
+
         self.letras += letra
 
-    @property
+        if self.errou >= 6:
+            self.ganhou = False
+
+        if '_' not in self.palavra_descoberta:
+            self.ganhou = True
+
     def get_letras_utilizadas(self):
-        return list(self.letras)
+      return list(self.letras)
 
     @property
     def palavra_descoberta(self):
-        return re.sub('[^%s\_\-0-9]' %  self.letras, '_', unidecode(self.palavra.description))
+
+        palavra_original = self.palavra.descricao
+        sem_pontuacao_palavra = re.sub('[^%s\_\-0-9]' % self.letras, '_', unidecode(palavra_original.lower()))
+        letras_palavra = list(sem_pontuacao_palavra)
+
+        for indice, letra in enumerate(letras_palavra):
+            if letra != '_':
+                letras_palavra[indice] = palavra_original[indice]
+
+        return str.join('', letras_palavra)
+
+    @classmethod
+    def criar(cls, usuario):
+
+        from random import randint
+
+        total = Palavra.objects.count()
+        palavra_selecionada = Palavra.objects.all()[randint(0, total - 1)]
+        return cls(jogador=usuario, palavra=palavra_selecionada)
 
     def __str__(self):
-        return 'jogador %s, palavra: %s, qt tentativas que errou: %s' % self.jogador.get_username() % self.palavra.descricao % self.errou
+        return 'jogador {0}, palavra: {1}, quantidade de tentativas que errou: {2}, id: {3}'.format(self.jogador, self.palavra.descricao, self.errou, self.id)
 
     def save(self, *args, **kwargs):
         self.letras = str.join('', sorted(self.get_letras_utilizadas()))
