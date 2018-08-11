@@ -21,9 +21,9 @@
         <form method="post" action="{% url 'HangmanGame:iniciar' %}">
             {% csrf_token %}
             <input type="hidden" name="partida-id" value="{{ partida.id }}" />
-            <input type="text" name="tentativa-letra" autofocus/>
+            <input type="text" name="tentativa-letra" maxlength="1" autofocus/>
             Ou
-            <input type="text" name="tentativa-palavra" />
+            <input type="text" name="tentativa-palavra" maxlength="{{ partida.palavra.descricao | length }}" />
             <input type="submit" name="enviar" value="Enviar" />
         </form>
     {% endif %}

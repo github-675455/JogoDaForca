@@ -17,7 +17,7 @@ class Partida(models.Model):
 
     def adivinhar_letra(self, letra):
 
-        if letra in self.letras or len(letra) != 1 or self.ganhou is not None:
+        if letra in self.letras or not letra.isalpha() or len(letra) != 1 or self.ganhou is not None:
             return
 
         if letra not in self.palavra_normalizada():
