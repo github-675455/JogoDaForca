@@ -5,7 +5,7 @@
     <title>Jogo</title>
 </head>
 <body>
-<label>
+<div>
     {% if partida.ganhou == True %}
         <h1>Você ganhou</h1>
         <span>A palavra é: </span>
@@ -17,16 +17,16 @@
         <h2>{{ partida.palavra.descricao }}</h2>
         <small><a href="{% url 'HangmanGame:home' %}">Iniciar Nova Partida</a></small>
     {% else %}
-        {{ partida.palavra_descoberta }}
+        <span>{{ partida.palavra_descoberta }}</span>
+        <form method="post" action="{% url 'HangmanGame:iniciar' %}">
+            {% csrf_token %}
+            <input type="hidden" name="partida-id" value="{{ partida.id }}" />
+            <input type="text" name="tentativa-letra" autofocus/>
+            Ou
+            <input type="text" name="tentativa-palavra" />
+            <input type="submit" name="enviar" value="Enviar" />
+        </form>
     {% endif %}
-</label>
-    <form method="post" action="{% url 'HangmanGame:iniciar' %}">
-        {% csrf_token %}
-        <input type="hidden" name="partida-id" value="{{ partida.id }}" />
-        <input type="text" name="tentativa-letra" />
-        Ou
-        <input type="text" name="tentativa-palavra" />
-        <input type="submit" name="enviar" value="Enviar" />
-    </form>
+</div>
 </body>
 </html>

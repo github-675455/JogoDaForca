@@ -1,11 +1,8 @@
 from django.views.decorators.cache import cache_page
-from django.views.decorators.csrf import requires_csrf_token
-from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django.http import HttpResponse
-from django.template import loader
 from django.shortcuts import render
-from ..models import Palavra, Partida
+from ..models import Partida
 
 class Jogo(View):
 
@@ -22,7 +19,7 @@ class Jogo(View):
         if partida_id != None and not nova_partida:
             partida = Partida.objects.get(pk=partida_id)
         else:
-            partida = Partida.criar(usuario=usuario)
+            partida = Partida.criar_randomica(usuario=usuario)
             partida.save()
             request.session['partida-id'] = partida.id
 
@@ -35,26 +32,28 @@ class Jogo(View):
     def post(self, request):
         partida_id = request.POST.get('partida-id')
 
-        partida_encontrada = Partida.objects.get(pk=partida_id)
+        partida_id = partida_id if partida_id is not '' else request.session.get('partida-id')
 
-        if partida_encontrada.jogador != None:
+        if partida_id is not '':
+            partida_encontrada = Partida.objects.filter(pk=partida_id).first()
 
-            usuario_autenticado = request.user
+            if partida_encontrada.jogador != None:
 
-            if usuario_autenticado != partida_encontrada.jogador:
-                return HttpResponse(status=401)
+                usuario_autenticado = request.user
 
-
+                if usuario_autenticado != partida_encontrada.jogador:
+                    return HttpResponse(status=401)
 
         tentativa_letra = request.POST.get('tentativa-letra')
         tentativa_palavra = request.POST.get('tentativa-palavra')
 
-        if tentativa_letra == None:
-            return HttpResponse(status=500)
+        if tentativa_letra == '' and tentativa_palavra == '':
+            return render(request, 'HangmanGame/jogo.html', {'partida': partida_encontrada})
 
-        tentativa_letra = tentativa_letra[0]
 
-        partida_encontrada.incluir_letra_tentada(letra=tentativa_letra)
+        partida_encontrada.adivinhar_letra(letra=tentativa_letra[:1])
+
+        partida_encontrada.adivinhar_palavra(palavra=tentativa_palavra)
 
         partida_encontrada.save()
 

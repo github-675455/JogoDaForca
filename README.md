@@ -1,5 +1,5 @@
 # JogoDaForca
-Joga da forca Web 
+Jogo da forca Web 
 
 * Desenvolvido em Pyhton
 * Django Framework

@@ -9,7 +9,7 @@ class Palavra(models.Model):
     registrado = models.DateField('Data de registro', auto_now_add=True)
     usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
-    def mostrar_letras_encontradas(self, letras = []):
+    def mostrar_letras_encontradas(self, letras):
         """Esconde letras com '_', caso a letra não esteja no parametro de array letras
 
         Retorna por exemplo: Para a palavra "Tempo", caso tenha passado o valor ['e', 'o'], o resultado será "_emp_".
