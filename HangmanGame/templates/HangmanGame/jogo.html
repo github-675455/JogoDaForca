@@ -21,12 +21,26 @@
         <form method="post" action="{% url 'HangmanGame:iniciar' %}">
             {% csrf_token %}
             <input type="hidden" name="partida-id" value="{{ partida.id }}" />
-            <input type="text" name="tentativa-letra" maxlength="1" autofocus/>
+            <input type="text" name="tentativa-letra" maxlength="1" onkeydown="AllowLettersOnly(event);" onkeyup="AllowLettersOnly(event);" autofocus/>
             Ou
-            <input type="text" name="tentativa-palavra" maxlength="{{ partida.palavra.descricao | length }}" />
+            <input type="text" name="tentativa-palavra" maxlength="{{ partida.palavra.descricao | length }}" onkeydown="AllowLettersOnly(event);" onkeyup="AllowLettersOnly(event);" />
             <input type="submit" name="enviar" value="Enviar" />
         </form>
     {% endif %}
+    {% load compress %}
+    {% compress js%}
+    <script>
+    function AllowLettersOnly(e) {
+        var keyCode = (e.keyCode ? e.keyCode : e.which);
+        if(keyCode == 8 || keyCode == 186 || keyCode == 9 || keyCode == 13){
+            return;
+        }
+        if (keyCode < 65 || keyCode > 90) {
+            e.preventDefault();
+        }
+    }
+    </script>
+    {% endcompress %}
 </div>
 </body>
 </html>

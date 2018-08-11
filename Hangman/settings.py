@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+COMPRESS_ROOT = "static/"
+COMPRESS_ENABLED = True
 
 # Application definition
 
@@ -37,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'compressor',
     'HangmanGame.apps.HangmangameConfig',
 ]
 
@@ -70,6 +73,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Hangman.wsgi.application'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
 
 
 # Database
