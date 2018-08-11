@@ -9,4 +9,4 @@ class Perfil(models.Model):
     venceu = models.IntegerField(default=0)
 
     def __str__(self):
-        return 'perfil de %s' % self.usuario.get_full_name();
+        return 'perfil de %s' % self.usuario.get_username();
