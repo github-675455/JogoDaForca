@@ -17,9 +17,15 @@ class Jogo(View):
         usuario = request.user if request.user.is_authenticated else None
 
         if partida_id != None and not nova_partida:
-            partida = Partida.objects.get(pk=partida_id)
+            try:
+                partida = Partida.objects.get(pk=partida_id)
+            except Partida.DoesNotExist:
+                del request.session['partida-id']
+                partida = Partida.criar_randomica(usuario=usuario, sessao=request.session)
+                partida.save()
+                request.session['partida-id'] = partida.id
         else:
-            partida = Partida.criar_randomica(usuario=usuario)
+            partida = Partida.criar_randomica(usuario=usuario, sessao=request.session)
             partida.save()
             request.session['partida-id'] = partida.id
 
@@ -28,6 +34,7 @@ class Jogo(View):
         }
 
         return render(request, 'HangmanGame/jogo.html', context)
+
 
     def post(self, request):
         partida_id = request.POST.get('partida-id')
