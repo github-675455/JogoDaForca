@@ -209,3 +209,8 @@ pip-selfcheck.json
 
 
 # End of https://www.gitignore.io/api/pycharm,python,django,venv
+
+
+node_modules/
+assets/bundles/
+package-lock.json
