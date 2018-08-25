@@ -19,16 +19,25 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'oj!!a#*pu#1d9w(+uci&36b)hvwf!rl!gv)x#@m2lbr93r+w@iVrtwfhlyu4uegwdfwHrkcnwoto30y9i2kjnqnxnbfogpelj50yui3if'
+if os.getenv('SECRET_KEY') == None:
+    SECRET_KEY = 'oj!!a#*pu#1d9w(+uci&36b)hvwf!rl!gv)x#@m2lbr93r+w@iVrtwfhlyu4uegwdfwHrkcnwoto30y9i2kjnqnxnbfogpelj50yui3if'
+else:
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.getenv('DEBUG') == None:
+    DEBUG = True
+else:
+    DEBUG = bool(os.getenv('DEBUG'))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["new-hangmangame.herokuapp.com", "127.0.0.1"]
 
 COMPRESS_ROOT = "static/"
-COMPRESS_ENABLED = False
+if DEBUG:
+    COMPRESS_ENABLED = False
+else:
+    COMPRESS_ENABLED = True
 
 COMPRESS_CSS_FILTERS = ['compressor.filters.css_default.CssAbsoluteFilter', 'compressor.filters.cssmin.rCSSMinFilter']
 COMPRESS_JS_FILTERS = ['compressor.filters.jsmin.JSMinFilter']
@@ -142,3 +151,8 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'assets'),
 )
+
+
+import django_heroku
+
+d = django_heroku.settings(locals())
