@@ -7,21 +7,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js" crossorigin="anonymous"></script>
     <title>Jogo da forca</title>
-    <style>
-        #palavra-descoberta
-        {
-            letter-spacing: 14px;
-            font-size: 500%;
-            color: #d1d1d1;
-        }
-        .custom-grid
-        {
-            border-bottom: 2px solid #eee;
-            margin: 7px 0;
-            font-size: 28px;
-            color: #9e9e9e;
-        }
-    </style>
+    {% load compress %}{% compress css %}<style>
+    #palavra-descoberta
+    {
+        letter-spacing: 14px;
+        font-size: 500%;
+        color: #d1d1d1;
+    }
+    .custom-grid
+    {
+        border-bottom: 2px solid #eee;
+        margin: 7px 0;
+        font-size: 28px;
+        color: #9e9e9e;
+    }
+    </style>{% endcompress %}
 </head>
 <body class="grey lighten-5">
 <div class="container center-align">
@@ -94,13 +94,10 @@
                         </div>
                     </form>
                 </div>
-            </div>
-    {% endif %}
+            </div>{% endif %}
     </div>
 </div>
-{% load compress %}
-    {% compress js%}
-    <script>
+    {% load compress %}{% compress js%}<script>
     function AllowLettersOnly(e) {
         var keyCode = (e.keyCode ? e.keyCode : e.which);
         if(keyCode == 8 || keyCode == 186 || keyCode == 9 || keyCode == 13){
@@ -172,7 +169,6 @@
         var elems = document.querySelectorAll('.tooltipped');
         M.Tooltip.init(elems, {});
     });
-    </script>
-    {% endcompress %}
+    </script>{% endcompress %}
 </body>
 </html>

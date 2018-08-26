@@ -25,9 +25,9 @@ class Partida(models.Model):
         if letra not in self.palavra_normalizada():
             self.errou += 1
 
-        self.letras += letra
-
         self.contabilizar_inicio_partida_perfil()
+
+        self.letras += letra
 
         if self.errou >= 6:
             self.perdeu()
@@ -70,7 +70,7 @@ class Partida(models.Model):
 
     def contabilizar_inicio_partida_perfil(self):
 
-        if len(self.letras) is 1:
+        if len(self.letras) is 0:
             perfil = self.perfil_do_jogador()
 
             if perfil is not None:
