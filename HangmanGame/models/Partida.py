@@ -20,6 +20,8 @@ class Partida(models.Model):
         if letra in self.letras or not letra.isalpha() or len(letra) != 1 or self.ganhou is not None:
             return
 
+        letra = self.normalizar_texto(letra)
+
         if letra not in self.palavra_normalizada():
             self.errou += 1
 
