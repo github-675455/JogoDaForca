@@ -18,19 +18,4 @@ class Migration(migrations.Migration):
             name='sessao',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='sessions.Session'),
         ),
-        migrations.AlterField(
-            model_name='palavra',
-            name='comentario',
-            field=models.TextField(blank=True, verbose_name='Comentário, informações adicionais'),
-        ),
-        migrations.AlterField(
-            model_name='palavra',
-            name='usuario',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.AlterField(
-            model_name='perfil',
-            name='usuario',
-            field=models.OneToOneField(editable=False, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
-        ),
     ]
