@@ -12,13 +12,15 @@ class Jogo(View):
 
         partida_id = partida_id if partida_id else request.session.get('partida-id')
 
-        nova_partida = request.GET.get('novo')
-
         usuario = request.user if request.user.is_authenticated else None
 
-        if partida_id != None and not nova_partida:
+        if partida_id != None:
             try:
                 partida = Partida.objects.get(pk=partida_id)
+                if not partida.iniciou():
+                    partida.nova_palavra()
+                    partida.save()
+
             except Partida.DoesNotExist:
                 del request.session['partida-id']
                 partida = Partida.criar_randomica(usuario=usuario, sessao=request.session)
