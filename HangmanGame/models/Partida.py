@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
 from .Palavra import Palavra
 from .Perfil import Perfil
 from unidecode import unidecode
@@ -9,6 +10,7 @@ import re
 class Partida(models.Model):
     jogador = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     palavra = models.ForeignKey(Palavra, on_delete=models.CASCADE)
+    sessao = models.ForeignKey(Session, on_delete=models.CASCADE, null=True)
     inicio = models.DateTimeField('Início da partida', auto_now_add=True)
     ultimo_acesso = models.DateTimeField('Última vez que o jogador jogou a partida', auto_now=True)
     errou = models.SmallIntegerField('Quantas vezes o jogador errou as letras', default=0)
@@ -119,12 +121,14 @@ class Partida(models.Model):
         return unidecode(texto.strip().lower())
 
     @classmethod
-    def criar_randomica(cls, usuario):
+    def criar_randomica(cls, usuario, sessao):
 
         from random import randint
 
         total = Palavra.objects.count()
         palavra_selecionada = Palavra.objects.all()[randint(0, total - 1)]
+
+        sessao_encontrada = Session.objects.filter(session_key=sessao.session_key).first()
 
         if usuario is not None:
             perfil_encontrado = Perfil.objects.filter(usuario=usuario).first()
@@ -132,7 +136,7 @@ class Partida(models.Model):
                 perfil = Perfil(usuario=usuario)
                 perfil.save()
 
-        return cls(jogador=usuario, palavra=palavra_selecionada)
+        return cls(jogador=usuario, palavra=palavra_selecionada, sessao=sessao_encontrada)
 
     def __str__(self):
         return 'jogador {0}, palavra: {1}, quantidade de tentativas que errou: {2}, id: {3}'.format(self.jogador, self.palavra.descricao, self.errou, self.id)

@@ -44,22 +44,31 @@
         </span>
     </div>
     <div class="row">
-            <div class="row">
-                <div class="col s12 x12">
-                    {% if partida.ganhou is True %}
-                        <div id="palavra-descoberta">{{ partida.palavra.descricao }}</div>
-                        <h1>Você ganhou!</h1>
-                        <small><a href="{% url 'HangmanGame:iniciar' %}?novo=1">Iniciar Nova Partida</a></small>
-                    {% elif partida.ganhou is False %}
-                        <div id="palavra-descoberta">{{ partida.palavra.descricao }}</div>
-                        <h1>Você perdeu!</h1>
-                        <small><a href="{% url 'HangmanGame:iniciar' %}?novo=1">Iniciar Nova Partida</a></small>
-                    {% else %}
-                        <div id="palavra-descoberta">{{ partida.palavra_descoberta }}</div>
-                    {% endif %}
-                </div>
+        <div class="row">
+            <div class="col s12 x12">
+                {% if partida.ganhou is None %}
+                <div id="palavra-descoberta">{{ partida.palavra_descoberta }}</div>
+                {% elif partida.ganhou is not None %}
+                <div id="palavra-descoberta">{{ partida.palavra.descricao }}</div>
+                {% endif %}
             </div>
-            {% if partida.ganhou is None %}<div class="row">
+        </div>
+        {% if partida.ganhou is True %}
+            <h1>Você ganhou!</h1>
+            <div class="row s12">
+             <a class="btn waves-effect grey lighten-0" href="{% url 'HangmanGame:iniciar' %}?novo=1">
+                <i class="material-icons right">fiber_new</i> Novo jogo
+              </a>
+            </div>
+        {% elif partida.ganhou is False %}
+            <h1>Você perdeu!</h1>
+            <div class="row s12">
+             <a class="btn waves-effect grey lighten-0" href="{% url 'HangmanGame:iniciar' %}?novo=1">
+                <i class="material-icons right">fiber_new</i> Novo jogo
+              </a>
+            </div>
+        {% else %}
+            <div class="row">
                 <div class="col x12 l6 offset-l3 m12">
                     <form method="post" action="{% url 'HangmanGame:iniciar' %}" autocomplete="off" >
                         {% csrf_token %}
@@ -153,6 +162,9 @@
         }
     }
     montarCorpo( {{ partida.errou }});
+    {% if partida.ganhou == False %}
+        montarCorpo(10);
+    {% endif %}
     document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.tooltipped');
         M.Tooltip.init(elems, {});

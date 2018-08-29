@@ -33,6 +33,8 @@ else:
 
 ALLOWED_HOSTS = ["new-hangmangame.herokuapp.com", "127.0.0.1"]
 
+LOGIN_REDIRECT_URL = '/jogo'
+
 COMPRESS_ROOT = "static/"
 if DEBUG:
     COMPRESS_ENABLED = False
