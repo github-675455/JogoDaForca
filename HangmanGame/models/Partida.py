@@ -116,6 +116,17 @@ class Partida(models.Model):
     def palavra_normalizada(self):
         return self.normalizar_texto(self.palavra.descricao)
 
+    def nova_palavra(self):
+        from random import randint
+        total = Palavra.objects.count()
+        self.palavra = Palavra.objects.all()[randint(0, total - 1)]
+
+    def iniciou(self):
+        return self.errou > 0
+
+    def acabou(self):
+        return self.ganhou != None
+
     @staticmethod
     def normalizar_texto(texto):
         return unidecode(texto.strip().lower())
